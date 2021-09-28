@@ -27,7 +27,7 @@ $(".list-group").on("click", "span", function () {
 	var dateInput = $("<input>").attr("type", "text").addClass("form-control").val(date);
 	$(this).replaceWith(dateInput);
 	dateInput.datepicker({
-		//minDate: 0,
+		minDate: 0,
 		onClose: function () {
 			$(this).trigger("change");
 		}
@@ -54,7 +54,23 @@ $(".card .list-group").sortable({
 	tolerance: "pointer",
 	helper: "clone",
 
-	update: function (event) {
+	activate: function () {
+		$(this).addClass("dropover");
+		$(".bottom-trash").addClass("bottom-trash-drag");
+	},
+	deactivate: function () {
+		$(this).removeClass("dropover");
+		$(".bottom-trash").removeClass("bottom-trash-drag");
+	},
+	over: function (event) {
+		$(event.target).addClass("dropover-active");
+		$(".bottom-trash").addClass("bottom-trash-active");
+	},
+	out: function (event) {
+		$(event.target).removeClass("dropover-active");
+		$(".bottom-trash").removeClass("bottom-trash-active");
+	},
+	update: function () {
 		var tempArray = [];
 
 		$(this).children().each(function () {
@@ -82,7 +98,7 @@ $("#trash").droppable({
 });
 
 $("#modalDueDate").datepicker({
-	//minDate: 0
+	minDate: 0
 });
 
 // Modal was triggered.
@@ -99,7 +115,7 @@ $("#task-form-modal").on("shown.bs.modal", function () {
 });
 
 // Saves button in modal that was clicked.
-$("#task-form-modal .btn-primary").click(function () {
+$("#task-form-modal .btn-save").click(function () {
 	// Gets form values.
 	var taskText = $("#modalTaskDescription").val();
 	var taskDate = $("#modalDueDate").val();
@@ -182,3 +198,9 @@ function loadTasks() {
 function saveTasks() {
 	localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+setInterval(function () {
+	$(".card .list-group-item").each(function () {
+		auditTask($(this));
+	});
+}, (1000 * 60) * 30);
