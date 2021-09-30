@@ -1,5 +1,4 @@
 var tasks = {};
-
 // Loads tasks for the first time.
 loadTasks();
 
@@ -100,20 +99,16 @@ $("#trash").droppable({
 $("#modalDueDate").datepicker({
 	minDate: 0
 });
-
 // Modal was triggered.
 $("#task-form-modal").on("show.bs.modal", function () {
-
 	// Clears values.
 	$("#modalTaskDescription, #modalDueDate").val("");
 });
-
 // Modal is fully visible.
 $("#task-form-modal").on("shown.bs.modal", function () {
 	// Highlights textarea.
 	$("#modalTaskDescription").trigger("focus");
 });
-
 // Saves button in modal that was clicked.
 $("#task-form-modal .btn-save").click(function () {
 	// Gets form values.
@@ -122,10 +117,8 @@ $("#task-form-modal .btn-save").click(function () {
 
 	if (taskText && taskDate) {
 		createTask(taskText, taskDate, "toDo");
-
 		// Closes modal.
 		$("#task-form-modal").modal("hide");
-
 		// Saves object values in tasks array.
 		tasks.toDo.push({
 			text: taskText,
@@ -134,7 +127,6 @@ $("#task-form-modal .btn-save").click(function () {
 		saveTasks();
 	}
 });
-
 // Removes all tasks.
 $("#remove-tasks").on("click", function () {
 	for (var key in tasks) {
@@ -149,13 +141,11 @@ function createTask(taskText, taskDate, taskList) {
 	var taskLi = $("<li>").addClass("list-group-item");
 	var taskSpan = $("<span>").addClass("badge badge-primary badge-pill").text(taskDate);
 	var taskP = $("<p>").addClass("m-1").text(taskText);
-
 	// Appends span and p element to parent li.
 	taskLi.append(taskSpan, taskP);
 	console.log(taskLi)
 	// Checks due date.
 	auditTask(taskLi);
-
 	// Appends to ul list on the page.
 	$("#list-" + taskList).append(taskLi);
 }
@@ -175,7 +165,6 @@ function auditTask(taskEl) {
 
 function loadTasks() {
 	tasks = JSON.parse(localStorage.getItem("tasks"));
-
 	// If nothing is in localStorage, creates a new object to track all task status arrays.
 	if (!tasks) {
 		tasks = {
@@ -185,7 +174,6 @@ function loadTasks() {
 			done: []
 		}
 	}
-
 	// Loops over object properties.
 	$.each(tasks, function (list, array) {
 		// Then loops over sub-array.
